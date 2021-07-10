@@ -57,8 +57,8 @@ if you click on any product you can show the details:
   ![Screenshot](images/8.JPG)
  ## DataBase:
  * User Table:
-  ![Screenshot](images/12.JPG)
+   ![Screenshot](images/12.JPG)
  * Product Table:
    ![Screenshot](images/10.JPG) 
- *  BidOffer Table:
-    ![Screenshot](images/11.JPG) 
+ * BidOffer Table:
+   ![Screenshot](images/11.JPG) 
