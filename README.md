@@ -143,9 +143,8 @@ if you click on any product you can show the details:
    ![Screenshot](images/11.JPG) 
    # Some Tests in postman:
    * get product
-     ![Screenshot](postman1.JPG) 
+     ![Screenshot](1.JPG) 
    * Search for a prduct:
-     ![Screenshot](postman2.JPG)  
-     #
-     # Note:
+     ![Screenshot](2.JPG)  
+    
      
