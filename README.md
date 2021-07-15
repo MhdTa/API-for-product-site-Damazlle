@@ -64,26 +64,33 @@ You can also login by entering phone number and password
 ## products page
 after login you can show all products and add a new product
  ```php
-   public function index()
+    public function index()
     {
-        return Product::all();
+        //get the products
+        $products = Product::latest()->paginate(5);
+        return response($products);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
+   //add a new product
+    public function store(Request $request,Product $product)
     {
-        $request->validate([
-            'name' => 'required',
-            'slug' => 'required',
-            'price' => 'required'
+       
+        $this->validate($request, [
+            'productName' => 'required',
+            'productPrice' => 'required',
         ]);
 
-        return Product::create($request->all());
+        
+        $product->productName =  $request->get('productName');
+        $product->initialPrice =  $request->get('productPrice');
+        $product->isSold =  0;
+        $product->user_id =  $request->user()->id;
+
+        //store in db
+        $product->save();
+
+
+        return response()->setStatusCode(202,'The product is created successfully!');
     }
   ```
 ## show a product
@@ -105,13 +112,28 @@ if you click on any product you can show the details:
  using laravel-searchable repo link:
  https://github.com/spatie/laravel-searchable
  only un sold products shown
+  ```php
+  public function search( Request $request)
+    {
  
- ![Screenshot](images/9.JPG)
+        $searchterm = $request->input('query');
+ 
+        $searchResults = (new Search())
+                    ->registerModel(Product::class, 'productName')
+                    ->perform($searchterm);
+              
+         return response( compact('searchResults', 'searchterm'));
+    }
+  ```
  ## Notes:
  * If you are not logged-in you can only show the products
-  ![Screenshot](images/1.JPG)
- * if you are sold the product you can not edit or delete it
-  ![Screenshot](images/8.JPG)
+  ```php
+     public function __construct()
+    {
+        //just loged in user can do these functions
+        $this->middleware(['auth'])->only(['store', 'destroy','update','sell']);
+    }
+   ```
  ## DataBase:
  * User Table:
    ![Screenshot](images/12.JPG)
@@ -125,4 +147,5 @@ if you click on any product you can show the details:
    * Search for a prduct:
      ![Screenshot](postman2.JPG)  
      #
-     # Hope you liked it (: (Mohamed Taha)
+     # Note:
+     
