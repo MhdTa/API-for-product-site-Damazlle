@@ -20,8 +20,28 @@ composer global require laravel/installer
  ```
  ## Signin
 After entering the required information, it will be verified and authenticated
+ ```php
+    public function store(Request $request)
+    {
+        $this->validate($request, [
+           
+            'username' => 'required|max:255',
+            'tel' => 'required|max:255',
+            'password' => 'required|confirmed',
+        ]);
 
-![Screenshot](images/2.JPG)
+        User::create([
+            'username' => $request->username,
+            'tel' => $request->tel,
+            'password' => Hash::make($request->password),
+        ]);
+
+        auth()->attempt($request->only('tel', 'password'));
+
+        return response($request,202);
+    }
+    
+  ```
 ## Log in
 You can also login by entering phone number and password
 ![Screenshot](images/4.JPG)
