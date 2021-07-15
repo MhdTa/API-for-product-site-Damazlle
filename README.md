@@ -44,11 +44,48 @@ After entering the required information, it will be verified and authenticated
   ```
 ## Log in
 You can also login by entering phone number and password
-![Screenshot](images/4.JPG)
+ ```php
+    public function store(Request $request)
+    {
+        //validate the data
+        $this->validate($request, [
+            'tel' => 'required',
+            'password' => 'required',
+        ]);
+
+        
+        if (!auth()->attempt($request->only('tel', 'password'), $request->remember)) {
+            return back()->with('status', 'Invalid login details');
+        }
+
+        return response()->setStatusCode(202,'user login successfully!');
+    }
+ ```
 ## products page
 after login you can show all products and add a new product
+ ```php
+   public function index()
+    {
+        return Product::all();
+    }
 
-![Screenshot](images/5.JPG)
+    /**
+     * Store a newly created resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function store(Request $request)
+    {
+        $request->validate([
+            'name' => 'required',
+            'slug' => 'required',
+            'price' => 'required'
+        ]);
+
+        return Product::create($request->all());
+    }
+  ```
 ## show a product
 if you click on any product you can show the details:
 * Seller name
